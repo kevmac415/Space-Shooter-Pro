@@ -18,11 +18,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
+    private GameObject _tripleShotPrefab;
+    [SerializeField]
     private float _fireRate = 0.2f;
     private float _canFire = -1f;
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
+
 
     
     void Start()
@@ -81,8 +86,15 @@ public class Player : MonoBehaviour
                                     //if i hit the space key im going to spawn gameObject
             {
                 _canFire = Time.time + _fireRate;
-                Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity); //creates laser and transforms it to the 0.8f position above the player, This quaternion corresponds to "no rotation" - the object is perfectly aligned with the world or parent axes. 
+
+                if (_isTripleShotActive == true)
+                {
+                    Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+                } else {
+                    Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.021f, 0), Quaternion.identity); //creates laser and transforms it to the 0.8f position above the player, This quaternion corresponds to "no rotation" - the object is perfectly aligned with the world or parent axes.
+                }
             }
+        
 
         public void Damage()        //public so that enemy can get this
         {
