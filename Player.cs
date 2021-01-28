@@ -14,11 +14,11 @@ public class Player : MonoBehaviour
     //optional value assigned
     
     [SerializeField] //Lets you read and use the slider tool in unity even on private
-    private float _speed = 3.5f;
+    private float _speed = 5f;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
-    private float _fireRate = 0.5f;
+    private float _fireRate = 0.2f;
     private float _canFire = -1f;
     [SerializeField]
     private int _lives = 3;
