@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
 
                 if (_isTripleShotActive == true)
                 {
-                    Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+                    Instantiate(_tripleShotPrefab, transform.position + new Vector3(-1.228f, 0.899f, -13.08f), Quaternion.identity);
                 } else {
                     Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.021f, 0), Quaternion.identity); //creates laser and transforms it to the 0.8f position above the player, This quaternion corresponds to "no rotation" - the object is perfectly aligned with the world or parent axes.
                 }
@@ -106,5 +106,22 @@ public class Player : MonoBehaviour
                 _spawnManager.OnPlayerDeath();
                 Destroy(this.gameObject);
             }
+        }
+
+        public void TripleShotActive()
+        //tripleShotActive becomes true
+        //start the power down coroutine for triple shot
+        {
+            _isTripleShotActive = true;
+            StartCoroutine(TripleShotPowerDownRoutine());
+        }
+
+        //IEnumerator TripleShotPowerDownRoutine
+        //wait 5 seconds
+        //set the triple shot to false
+        IEnumerator TripleShotPowerDownRoutine()
+        {
+            yield return new WaitForSeconds(5.0f);
+            _isTripleShotActive = false;
         }
 }
