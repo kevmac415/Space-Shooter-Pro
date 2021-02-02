@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Diagnostics.Contracts;
+using System.Security;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +52,7 @@ public class Powerup : MonoBehaviour
                         player.SpeedBoostActive();
                         break;
                     case 2:
-                        Debug.Log("Collected Shields Powerup");
+                        player.ShieldsActive();
                         break;
                     default:
                         Debug.Log("Deafault Value");

@@ -15,8 +15,7 @@ public class Player : MonoBehaviour
     
     [SerializeField] //Lets you read and use the slider tool in unity even on private
     private float _speed = 5f;
-    [SerializeField]
-    private bool _isSpeedBoostActive = false;
+
     [SerializeField]
     private float _speedMultiplier = 2;
     [SerializeField]
@@ -29,8 +28,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
-    [SerializeField]
+    
+    
     private bool _isTripleShotActive = false;
+    private bool _isSpeedBoostActive = false;
+    private bool _isShieldsActive = false;
+    
+    [SerializeField]
+    private GameObject _shieldVisualizer;
+
+    //variable reference to the shield visualizer
 
 
     
@@ -97,10 +104,20 @@ public class Player : MonoBehaviour
             }
         
 
-        public void Damage()        //public so that enemy can get this
+        public void Damage()
         {
-            _lives -= 1;            //or _lives --; or _lives = _lives - 1;
-                                    //check if dead, if are then destroy us
+            if (_isShieldsActive == true)
+            {
+                _isShieldsActive = false;
+                _shieldVisualizer.SetActive(false);
+                return;
+            }
+            //if shields are active 
+            //do nothing
+            //deactivate shields
+            //return;
+            _lives -= 1;
+
             if (_lives < 1)
             {
                 //communicate with spawn manager to stop spawning on death
@@ -109,7 +126,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        //TRIPLE SHOT
+        //TRIPLE SHOT POWER UP
         public void TripleShotActive()
         {
             _isTripleShotActive = true;
@@ -122,7 +139,7 @@ public class Player : MonoBehaviour
             _isTripleShotActive = false;
         }
 
-        //SPEED BOOST
+        //SPEED BOOST POWER UP
         public void SpeedBoostActive()
         {
             _speed *= _speedMultiplier;
@@ -135,5 +152,20 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(5.0f);
             _isSpeedBoostActive = false;
             _speed /= _speedMultiplier;
+        }
+
+        //SHIELDS POWER UP
+        public void ShieldsActive()
+        {
+            _isShieldsActive = true;
+            _shieldVisualizer.SetActive(true);
+            StartCoroutine(ShieldsPowerDownRoutine());
+        }
+        
+        IEnumerator ShieldsPowerDownRoutine()
+        {
+            yield return new WaitForSeconds(20.0f);
+            _isShieldsActive = false;
+            _shieldVisualizer.SetActive(false);
         }
 }
