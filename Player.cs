@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
     [SerializeField] //Lets you read and use the slider tool in unity even on private
     private float _speed = 5f;
     [SerializeField]
+    private bool _isSpeedBoostActive = false;
+    [SerializeField]
+    private float _speedMultiplier = 2;
+    [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
@@ -58,12 +62,9 @@ public class Player : MonoBehaviour
 
             Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);  //direction is a variable holding the code above
             
-            //transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
-            //transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
             transform.Translate(direction * _speed * Time.deltaTime);
-                                                                                            //converted 1 meter per frame to one second per frame with the Time.deltaTime representing real life seconds.
-                                                                                            //equivalent to incorporating real time 
 
+            
             if (transform.position.y >= 0) {
                 transform.position = new Vector3(transform.position.x, 0, 0); //These next two if statements create the boundaries
             } else if(transform.position.y <= -3.8f) {
@@ -108,20 +109,31 @@ public class Player : MonoBehaviour
             }
         }
 
+        //TRIPLE SHOT
         public void TripleShotActive()
-        //tripleShotActive becomes true
-        //start the power down coroutine for triple shot
         {
             _isTripleShotActive = true;
             StartCoroutine(TripleShotPowerDownRoutine());
         }
 
-        //IEnumerator TripleShotPowerDownRoutine
-        //wait 5 seconds
-        //set the triple shot to false
         IEnumerator TripleShotPowerDownRoutine()
         {
             yield return new WaitForSeconds(5.0f);
             _isTripleShotActive = false;
+        }
+
+        //SPEED BOOST
+        public void SpeedBoostActive()
+        {
+            _speed *= _speedMultiplier;
+            _isSpeedBoostActive = true;
+            StartCoroutine(SpeedBoostPowerDownRoutine());
+        }
+
+        IEnumerator SpeedBoostPowerDownRoutine()
+        {
+            yield return new WaitForSeconds(5.0f);
+            _isSpeedBoostActive = false;
+            _speed /= _speedMultiplier;
         }
 }
