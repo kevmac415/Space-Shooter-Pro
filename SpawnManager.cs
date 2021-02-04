@@ -27,9 +27,6 @@ public class SpawnManager : MonoBehaviour
     {
         
     }
-    //spawn game objects every 5 seconds
-    //Create a coroutine of type IEnumerator -- Yield events
-    //while loop
 
     IEnumerator SpawnEnemyRoutine()
     {
@@ -38,13 +35,12 @@ public class SpawnManager : MonoBehaviour
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(4.0f);
         }
     }
 
     IEnumerator SpawnPowerupRoutine()
     {
-        //every 3-7 seconds spawn in a power up
         while(_stopSpawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0); //Random position in the scene where the powerups spawn

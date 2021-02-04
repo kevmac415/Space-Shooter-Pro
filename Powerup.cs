@@ -21,10 +21,9 @@ public class Powerup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //move down at a speed of 3 (adjust in the inspector)
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        //when we leave the screen, destroy this object
-        if (transform.position.y < -5f)
+        
+        if (transform.position.y < -5f) //when we leave the screen, destroy this object
         {
             Destroy(this.gameObject);
         }

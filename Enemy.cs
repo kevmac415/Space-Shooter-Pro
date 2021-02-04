@@ -11,17 +11,18 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
+
+    private Player _player;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //move down at 4 meters per sec
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.down * _speed * Time.deltaTime); //move down at 4 meters per sec
         //check for if bottom of screen, respawn at top(Can reuse it not destroy it)
         //respawn at top with a new random x position
         if (transform.position.y < -5f)
@@ -33,11 +34,11 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //if other is player damage player, then destroy us
+        
         if (other.tag == "Player")
         {
             //damage player
-            Player player = other.transform.GetComponent<Player>(); //other.transform.GetComponent<Player>().Damage();
+            Player player = other.transform.GetComponent<Player>();
 
             if (player != null)
             {
@@ -47,10 +48,14 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        //if other is laser then destroy laser, then destroy us
+        //if other is laser then destroy laser, then destroy enemy
         if (other.tag == "Laser")
         {
             Destroy(other.gameObject);
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
             Destroy(this.gameObject);
 
         }

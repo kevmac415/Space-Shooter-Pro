@@ -37,6 +37,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldVisualizer;
 
+    [SerializeField]
+    private int _score;
+
+    private UIManager _uiManager;
+
     //variable reference to the shield visualizer
 
 
@@ -46,10 +51,17 @@ public class Player : MonoBehaviour
         //take the current position = new position (0, 0, 0) - starting position
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();//find the object, get the component
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        
         if (_spawnManager == null)
         {
             Debug.LogError("The spawn manager is null.");
         }
+
+        if (_uiManager == null)
+    {
+        Debug.LogError("The UI Manager is null");
+    }
     } 
 
     // Update is called once per frame
@@ -75,9 +87,9 @@ public class Player : MonoBehaviour
             if (transform.position.y >= 0) {
                 transform.position = new Vector3(transform.position.x, 0, 0); //These next two if statements create the boundaries
             } else if(transform.position.y <= -3.8f) {
-                transform.position =  new Vector3(transform.position.x, -3.8f, 0);
+                transform.position =  new Vector3(transform.position.x, -3.8f, 0); //transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
             }
-            //transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+            
             
             if (transform.position.x >= 11.3f) {
                 transform.position = new Vector3(-11.3f, transform.position.y, 0);
@@ -91,7 +103,6 @@ public class Player : MonoBehaviour
         }
 
         void FireLaser()
-                                    //if i hit the space key im going to spawn gameObject
             {
                 _canFire = Time.time + _fireRate;
 
@@ -112,11 +123,9 @@ public class Player : MonoBehaviour
                 _shieldVisualizer.SetActive(false);
                 return;
             }
-            //if shields are active 
-            //do nothing
-            //deactivate shields
-            //return;
-            _lives -= 1;
+        _lives -= 1;
+
+        _uiManager.UpdateLives(_lives);
 
             if (_lives < 1)
             {
@@ -164,8 +173,16 @@ public class Player : MonoBehaviour
         
         IEnumerator ShieldsPowerDownRoutine()
         {
-            yield return new WaitForSeconds(20.0f);
+            yield return new WaitForSeconds(30.0f);
             _isShieldsActive = false;
             _shieldVisualizer.SetActive(false);
         }
+
+        public void AddScore(int points)
+        {
+            _score += points;
+            _uiManager.UpdateScore(_score);
+        }
+        //method to add 10 to score
+        //communicate with the UI to update the score
 }
